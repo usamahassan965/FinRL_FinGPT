@@ -9,8 +9,8 @@ import streamlit as st
 st.title("Stock News Analysis")
 
 model_sent = "ProsusAI/finbert"
-model_sum = "nickmuchi/fb-bart-large-finetuned-trade-the-event-finance-summarizer"
-tokens = 1536
+model_sum = "Falconsai/text_summarization"
+tokens = 2048
 
 
 @st.cache_resource
@@ -105,16 +105,21 @@ if st.button("Stocks Analysis") and news is not None:
         sentiments.append(sentiment)
         probabilities.append(probability)
         print(str(i)+': '+str(len(news_item)))
-        summary = summarizer(news_item)[0]["summary_text"]
+        summary = summarizer(news_item,max_length=200,min_length=30,do_sample=False)[0]["summary_text"]
+        if summary[-1] == '.':
+            pass
+        else:
+            summary += '.'
+        summary += "\n"
 
         summaries.append(summary)
         print(sentiment, probability)
         print(summary)
     sentimode = mode(sentiments)
     probmean = mean(probabilities)
-    result_summary = '\n'.join(summaries)
-    st.subheader("News Summary")
+    result_summary = "\n".join(summaries)
+    st.subheader("Headlines")
     st.success(result_summary)
-    st.subheader("News Sentiment")
-    st.success(f'Sentiment: {sentimode}')
-    st.success(f'Score: {probmean}')
+    st.subheader("Sentiment Analysis")
+    st.success(f'Sentiment: {sentimode.upper()}')
+    st.success(f'Score: {probmean:.2f}')
