@@ -120,8 +120,13 @@ if st.button("Stocks Analysis") and news is not None:
     st.subheader("Sentiment Analysis")
     st.success(f'Sentiment: {sentimode.upper()}')
     st.success(f'Score: {probmean:.2f}')
-    sentiment_model.clear()
-    summary_model.clear()
-    download_news.clear()
-    split_news.clear()
+    if st.button("Clear All"):
+    # Clear values from *all* all in-memory and on-disk data caches:
+    # i.e. clear values from both square and cube
+        sentiment_model.clear()
+        summary_model.clear()
+        download_news.clear()
+        split_news.clear()
+        st.cache_data.clear()
+        
     
