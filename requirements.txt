@@ -1,0 +1,7 @@
+streamlit
+huggingface-hub
+transformer
+finnhub-python
+torch
+tqdm
+re
