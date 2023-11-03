@@ -1,6 +1,6 @@
 streamlit
 huggingface-hub
-transformer
+transformers
 finnhub-python
 torch
 tqdm
