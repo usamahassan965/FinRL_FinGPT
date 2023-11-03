@@ -19,12 +19,11 @@ def sentiment_model(model_name):
     tokenizer = AutoTokenizer.from_pretrained(model_name)
     return model, tokenizer
 
-
-def summary_model(model_sum):
-    tokenizer = AutoTokenizer.from_pretrained(model_sum)
-    model = AutoModelForSeq2SeqLM.from_pretrained(model_sum)
-
-    return model, tokenizer
+@st.cache_resource
+def summary_model(model_name):
+    summarizer = pipeline("summarization", model=model_name)
+    summarizer = summarizer(news_item,max_length=200,min_length=30,do_sample=False)[0]["summary_text"]
+    return summarizer
 
 
 @st.cache_data
@@ -93,8 +92,6 @@ if st.button("Stocks Analysis") and news is not None:
     #model2, tokenizer2 = summary_model(model_sum)
     # Use a pipeline as a high-level helper
 
-    summarizer = pipeline("summarization", model=model_sum)
-
     for i, news_item in enumerate(split_news_list):
         inputs = tokenizer(news_item, return_tensors="pt")
         outputs = model(**inputs)
@@ -105,7 +102,7 @@ if st.button("Stocks Analysis") and news is not None:
         sentiments.append(sentiment)
         probabilities.append(probability)
         print(str(i)+': '+str(len(news_item)))
-        summary = summarizer(news_item,max_length=200,min_length=30,do_sample=False)[0]["summary_text"]
+        summary = summary_model(model_name=model_sum)
         if summary[-1] == '.':
             pass
         else:
@@ -123,3 +120,8 @@ if st.button("Stocks Analysis") and news is not None:
     st.subheader("Sentiment Analysis")
     st.success(f'Sentiment: {sentimode.upper()}')
     st.success(f'Score: {probmean:.2f}')
+    sentiment_model.clear()
+    summary_model.clear()
+    download_news.clear()
+    split_news.clear()
+    
