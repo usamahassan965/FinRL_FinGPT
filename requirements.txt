@@ -4,4 +4,4 @@ transformers
 finnhub-python
 torch
 tqdm
-
+lxml
