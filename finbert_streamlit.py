@@ -20,7 +20,7 @@ def sentiment_model(model_name):
     return model, tokenizer
 
 @st.cache_resource
-def summary_model(model_name):
+def summary_model(model_name,news_item):
     summarizer = pipeline("summarization", model=model_name)
     summarizer = summarizer(news_item,max_length=200,min_length=30,do_sample=False)[0]["summary_text"]
     return summarizer
@@ -102,7 +102,7 @@ if st.button("Stocks Analysis") and news is not None:
         sentiments.append(sentiment)
         probabilities.append(probability)
         print(str(i)+': '+str(len(news_item)))
-        summary = summary_model(model_name=model_sum)
+        summary = summary_model(model_name=model_sum,news_item=news_item)
         if summary[-1] == '.':
             pass
         else:
