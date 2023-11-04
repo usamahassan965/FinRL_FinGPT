@@ -128,5 +128,6 @@ if st.button("Stocks Analysis") and news is not None:
         download_news.clear()
         split_news.clear()
         st.cache_data.clear()
+        st.cache_resource.clear()
         
     
