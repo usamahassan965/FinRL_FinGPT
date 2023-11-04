@@ -88,6 +88,8 @@ if st.button("Stocks Analysis") and news is not None:
     summaries = []
     split_news_list = split_news(news,max_tokens=tokens)
     model, tokenizer = sentiment_model(model_sent)
+    summarizer = summary_model(model_name=model_sum)
+
     #model2, tokenizer2 = summary_model(model_sum)
     # Use a pipeline as a high-level helper
 
@@ -103,7 +105,6 @@ if st.button("Stocks Analysis") and news is not None:
         
         print(str(i)+': '+str(len(news_item)))
         
-        summarizer = summary_model(model_name=model_sum)
         summary = summarizer(news_item,max_length=200,min_length=30,do_sample=False)[0]["summary_text"]
         if summary[-1] == '.':
             pass
